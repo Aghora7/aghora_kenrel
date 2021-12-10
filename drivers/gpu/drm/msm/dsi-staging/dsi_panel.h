@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
- * Copyright (C) 2019 XiaoMi, Inc.
+ * Copyright (c) 2016-2020, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -184,6 +183,17 @@ enum dsi_panel_type {
 	DSI_PANEL_TYPE_MAX,
 };
 
+/* Extended Panel config for panels with additional gpios */
+struct dsi_panel_exd_config {
+	int display_1p8_en;
+	int led_5v_en;
+	int switch_power;
+	int led_en1;
+	int led_en2;
+	int oenab;
+	int selab;
+};
+
 struct dsi_panel {
 	const char *name;
 	enum dsi_panel_type type;
@@ -233,45 +243,7 @@ struct dsi_panel {
 
 	bool sync_broadcast_en;
 
-	u32 panel_on_dimming_delay;
-	u32 last_bl_lvl;
-	struct delayed_work cmds_work;
-
-	bool dsi_panel_off_mode;
-	/* check disable cabc when panel off */
-	bool onoff_mode_enabled;
-	bool disable_cabc;
-	bool off_keep_reset;
-	struct dsi_read_config brightness_cmds;
-	struct dsi_read_config xy_coordinate_cmds;
-	struct dsi_read_config max_luminance_cmds;
-	struct dsi_read_config max_luminance_valid_cmds;
-	struct dsi_read_config panel_ddic_id_cmds;
-	u8 panel_read_data[BUF_LEN_MAX];
-	u32 panel_bl_info[PANEL_BL_INFO_NUM];
-
-	u32 hist_bl_offset;
-
-	s32 backlight_delta;
-	bool fod_hbm_enabled;
-	bool in_aod;
-	u32 doze_backlight_threshold;
-	u32 dc_threshold;
-	ktime_t fod_hbm_off_time;
-	bool dc_enable;
-	/* Display count */
-	u64 boottime;
-	u64 bootRTCtime;
-	u64 bootdays;
-	u64 panel_active;
-	u64 kickoff_count;
-	u64 bl_duration;
-	u64 bl_level_integral;
-	u64 bl_highlevel_duration;
-	u64 bl_lowlevel_duration;
-	u64 hbm_duration;
-	u64 hbm_times;
-	u64 panel_dead;
+	struct dsi_panel_exd_config exd_config;
 };
 
 static inline bool dsi_panel_ulps_feature_enabled(struct dsi_panel *panel)
